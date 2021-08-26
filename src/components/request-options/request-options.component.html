@@ -1,0 +1,29 @@
+<span>AuthToken</span>
+<input type="text" [(ngModel)]="options.authToken" />
+
+<span>SourceId</span>
+<input type="text" [(ngModel)]="options.sourceId" />
+
+<span>DateFrom</span>
+<div>
+  <input type="date" [(ngModel)]="options.dateFromDate" />
+  <input type="time" [(ngModel)]="options.dateFromTime" />
+</div>
+
+<span>DateTo</span>
+<div>
+  <input type="date" [(ngModel)]="options.dateToDate" />
+  <input type="time" [(ngModel)]="options.dateToTime" />
+</div>
+
+<span>AggregationType</span>
+<select [(ngModel)]="options.aggregationType">
+  <option *ngFor="let type of options.aggregationTypes" value="{{ type }}">
+    {{ type }}
+  </option>
+</select>
+
+<span>Series</span>
+<input type="text" [(ngModel)]="options.series" />
+
+<button (click)="emitRequestOptions()">Request data</button>

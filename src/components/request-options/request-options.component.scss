@@ -1,0 +1,14 @@
+:host {
+  display: grid;
+  grid-template-columns: 8rem 13.75rem;
+  grid-row-gap: 0.25rem;
+  grid-auto-rows: 1fr;
+
+  & > span {
+    align-self: center;
+  }
+
+  & > button {
+    grid-column: 1 / span 2;
+  }
+}

@@ -1,0 +1,9 @@
+<app-loading-bar></app-loading-bar>
+
+<app-request-options
+  (setOptions)="ploc.updateRequestOptions($event)"
+></app-request-options>
+
+<hr />
+
+<app-measurements-chart [chartData$]="ploc.chartData$"></app-measurements-chart>
