@@ -9,7 +9,7 @@ import {
 } from "../../models/measurement.model";
 import { convertToChartData } from "../../components/operators/measurements-to-chartset";
 
-export const getBaseUrl = () => "https://logicline.cumulocity.com";
+export const getBaseUrl = () => "https://demos.cumulocity.com";
 export const getMeasurementsBaseUrl = () =>
   `${getBaseUrl()}/measurement/measurements`;
 export const getMeasurementSeriesUrl = () =>

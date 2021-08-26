@@ -10,7 +10,7 @@ export class AppPloc {
   private readonly requestOptions = new BehaviorSubject<RequestOptions>(null);
   private readonly timer$ = timer(0, 15000);
 
-  readonly chartData$: Observable<ChartData>;
+  readonly chartData$: Observable<ChartData<"line">>;
 
   constructor(private service: MeasurementService) {
     this.chartData$ = this.setupChartData(
@@ -26,7 +26,7 @@ export class AppPloc {
   private setupChartData(
     timer$: Observable<number>,
     requestOptions$: Observable<RequestOptions>
-  ): Observable<ChartData> {
+  ): Observable<ChartData<"line">> {
     return combineLatest([timer$, requestOptions$]).pipe(
       filter(([_, options]) => !!options),
       map(([_, options]) => options),

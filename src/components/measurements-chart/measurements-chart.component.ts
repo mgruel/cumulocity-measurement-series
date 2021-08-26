@@ -1,6 +1,20 @@
 import { Component, Input } from "@angular/core";
-import { ChartOptions, ChartData } from "chart.js";
+import {
+  Chart,
+  ChartData,
+  ChartOptions,
+  Legend,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  TimeScale,
+  Title
+} from "chart.js";
+import 'chartjs-adapter-luxon';
 import { Observable } from "rxjs";
+
+Chart.register(LineController, LineElement, PointElement, LinearScale, TimeScale, Title, Legend);
 
 @Component({
   selector: "app-measurements-chart",
@@ -9,31 +23,14 @@ import { Observable } from "rxjs";
 })
 export class MeasurementsChart {
   @Input() chartData$: Observable<ChartData>;
-  readonly chartOptions: ChartOptions = {
+  readonly chartOptions: ChartOptions<"line"> = {
     responsive: true,
     scales: {
-      xAxes: [
-        {
-          type: "time"
-        }
-      ],
-      yAxes: [
-        {
-          type: "linear"
-        }
-      ]
-    },
-    plugins: {
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: "xy"
-        },
-        zoom: {
-          enabled: true,
-          drag: true,
-          mode: "xy"
-        }
+      x: {
+        type: "time"
+      },
+      y: {
+        type: "linear"
       }
     }
   };

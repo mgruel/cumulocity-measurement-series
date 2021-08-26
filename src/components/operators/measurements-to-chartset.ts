@@ -1,6 +1,7 @@
 import { OperatorFunction, pipe } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import {
+  Dataset,
   Datasets,
   MeasurementSeries,
   MeasurementValues
@@ -16,7 +17,7 @@ export const convertToChartData = (): OperatorFunction<
       ([values, series]) => Object.keys(values).length > 0 && series.length > 0
     ),
     map(([values, series]) =>
-      series.map((s, index) => {
+      series.map((s, index): Dataset => {
         const color =
           "#" +
           (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6);
@@ -27,12 +28,12 @@ export const convertToChartData = (): OperatorFunction<
             .map(time => {
               const m = values[time][index];
               return {
-                x: new Date(time),
+                x: new Date(time).valueOf(),
                 y: (m.min + m.max) / 2
               };
             }),
-          backgroundColor: [color],
-          borderColor: [color],
+          backgroundColor: color,
+          borderColor: color,
           borderWidth: 1
         };
       })

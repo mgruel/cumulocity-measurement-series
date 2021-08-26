@@ -1,3 +1,5 @@
+import { ChartDataset } from "chart.js";
+
 export enum AggregationType {
   MINUTELY = "MINUTELY",
   HOURLY = "HOURLY",
@@ -14,7 +16,7 @@ export type RequestOptions = {
 };
 
 export type Measurement = {
-  x: Date;
+  x: number | string;
   y: number;
 };
 
@@ -35,12 +37,6 @@ export type MeasurementSeriesResponse = {
   truncated: boolean;
 };
 
-export type Dataset = {
-  label: string;
-  data: Measurements;
-  backgroundColor: Array<string>;
-  borderColor: Array<string>;
-  borderWidth: number;
-};
+export type Dataset = ChartDataset<"line">;
 
 export type Datasets = Array<Dataset>;
