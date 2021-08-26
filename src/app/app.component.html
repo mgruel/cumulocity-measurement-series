@@ -1,0 +1,12 @@
+<app-loading-bar></app-loading-bar>
+
+<app-request-options
+  [isLoading$]="state.isLoading$"
+  (setOptions)="state.updateRequestOptions($event)"
+></app-request-options>
+
+<hr />
+
+<app-measurements-chart
+  [chartData$]="state.chartData$"
+></app-measurements-chart>
