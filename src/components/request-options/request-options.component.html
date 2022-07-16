@@ -26,4 +26,4 @@
 <span>Series</span>
 <input type="text" [(ngModel)]="options.series" />
 
-<button (click)="emitRequestOptions()">Request data</button>
+<button (click)="emitRequestOptions()" [disabled]="isLoading$ | async">Request data</button>

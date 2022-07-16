@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter } from "@angular/core";
+import { Component, Output, EventEmitter, Input } from "@angular/core";
+import { Observable, of } from "rxjs";
 import {
   AggregationType,
   RequestOptions
@@ -10,10 +11,11 @@ import {
   styleUrls: ["./request-options.component.scss"]
 })
 export class RequestOptionsComponent {
+  @Input() isLoading$: Observable<boolean> = of(false);
   @Output() setOptions: EventEmitter<RequestOptions> = new EventEmitter();
 
   options = {
-    authToken: localStorage._tcy8 || null,
+    authToken: localStorage._tcy8 || "",
     sourceId: "323273711",
     dateFromDate: "2020-05-29",
     dateFromTime: "08:00",

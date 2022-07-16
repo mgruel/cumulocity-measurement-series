@@ -1,6 +1,7 @@
 <app-loading-bar></app-loading-bar>
 
 <app-request-options
+  [isLoading$]="ploc.isLoading$"
   (setOptions)="ploc.updateRequestOptions($event)"
 ></app-request-options>
 

@@ -4,6 +4,7 @@ import { combineLatest, timer, Observable, BehaviorSubject } from "rxjs";
 import { switchMap, map, tap, filter } from "rxjs/operators";
 import { ChartData } from "chart.js";
 import { RequestOptions } from "../models/measurement.model";
+import { LoadingService } from "../services/loading/loading.service";
 
 @Injectable()
 export class AppPloc {
@@ -11,8 +12,9 @@ export class AppPloc {
   private readonly timer$ = timer(0, 15000);
 
   readonly chartData$: Observable<ChartData<"line">>;
+  readonly isLoading$ = this.loadingService.isLoading$;
 
-  constructor(private service: MeasurementService) {
+  constructor(private loadingService: LoadingService, private service: MeasurementService) {
     this.chartData$ = this.setupChartData(
       this.timer$,
       this.requestOptions.asObservable()
@@ -28,7 +30,7 @@ export class AppPloc {
     requestOptions$: Observable<RequestOptions>
   ): Observable<ChartData<"line">> {
     return combineLatest([timer$, requestOptions$]).pipe(
-      filter(([_, options]) => !!options),
+      filter(([_, options]) => options?.authToken.trim() !== ""),
       map(([_, options]) => options),
       switchMap(requestOptions => this.service.getMeasurements(requestOptions)),
       map(datasets => ({
