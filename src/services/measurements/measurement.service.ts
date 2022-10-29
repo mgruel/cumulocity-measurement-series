@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { Observable, OperatorFunction, pipe } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable, throwError } from "rxjs";
 import { map } from "rxjs/operators";
-import {
-  RequestOptions,
-  MeasurementSeriesResponse,
-  Datasets
-} from "../../models/measurement.model";
 import { convertToChartData } from "../../components/operators/measurements-to-chartset";
+import {
+  Datasets,
+  MeasurementSeriesResponse,
+  RequestOptions
+} from "../../models/measurement.model";
 
 export const getBaseUrl = () => "https://demos.cumulocity.com";
 export const getMeasurementsBaseUrl = () =>
@@ -20,6 +20,12 @@ export class MeasurementService {
   constructor(private http: HttpClient) {}
 
   getMeasurements(requestOptions: RequestOptions): Observable<Datasets> {
+    if (!requestOptions) {
+      return throwError(() => new Error("Missing Request-Options"));
+    }
+    if (!requestOptions.authToken) {
+      return throwError(() => new Error("Missing Auth-Token"));
+    }
     const params = {
       source: requestOptions.sourceId,
       dateFrom: requestOptions.dateFrom.toISOString(),
@@ -27,7 +33,7 @@ export class MeasurementService {
       aggregationType: requestOptions.aggregationType
     };
     if (requestOptions.series) {
-      params["series"] = requestOptions.series;
+      params["series"] = requestOptions?.series;
     }
     return this.http
       .get<MeasurementSeriesResponse>(getMeasurementSeriesUrl(), {

@@ -1,10 +1,11 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { MeasurementService } from "../services/measurements/measurement.service";
-import { combineLatest, timer, Observable, BehaviorSubject } from "rxjs";
-import { switchMap, map, tap, filter } from "rxjs/operators";
 import { ChartData } from "chart.js";
+import { BehaviorSubject, combineLatest, Observable, of, timer } from "rxjs";
+import { catchError, filter, map, switchMap } from "rxjs/operators";
 import { RequestOptions } from "../models/measurement.model";
 import { LoadingService } from "../services/loading/loading.service";
+import { MeasurementService } from "../services/measurements/measurement.service";
 
 @Injectable()
 export class AppPloc {
@@ -14,7 +15,10 @@ export class AppPloc {
   readonly chartData$: Observable<ChartData<"line">>;
   readonly isLoading$ = this.loadingService.isLoading$;
 
-  constructor(private loadingService: LoadingService, private service: MeasurementService) {
+  constructor(
+    private loadingService: LoadingService,
+    private service: MeasurementService
+  ) {
     this.chartData$ = this.setupChartData(
       this.timer$,
       this.requestOptions.asObservable()
@@ -30,9 +34,16 @@ export class AppPloc {
     requestOptions$: Observable<RequestOptions>
   ): Observable<ChartData<"line">> {
     return combineLatest([timer$, requestOptions$]).pipe(
-      filter(([_, options]) => options?.authToken.trim() !== ""),
+      filter(([_, options]) => !!options && options?.authToken.trim() !== ""),
       map(([_, options]) => options),
-      switchMap(requestOptions => this.service.getMeasurements(requestOptions)),
+      switchMap(requestOptions =>
+        this.service.getMeasurements(requestOptions).pipe(
+          catchError((err: HttpErrorResponse | Error) => {
+            console.error("Error while retrieving the datasets.", (err as HttpErrorResponse).error ?? err);
+            return of([]);
+          })
+        )
+      ),
       map(datasets => ({
         datasets
       }))

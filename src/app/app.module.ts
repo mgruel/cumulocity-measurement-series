@@ -1,19 +1,13 @@
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import { ChartjsModule } from "@ctrl/ngx-chartjs";
-import { AppComponent } from "./app.component";
-import { ServicesModule } from "../services/services.module";
 import { CommonComponentsModule } from "../components/components.module";
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { LoadingInterceptor } from "../interceptors/loading.interceptor";
+import { ServicesModule } from "../services/services.module";
+import { AppComponent } from "./app.component";
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    ServicesModule,
-    CommonComponentsModule,
-    ChartjsModule
-  ],
+  imports: [BrowserModule, ServicesModule, CommonComponentsModule],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
