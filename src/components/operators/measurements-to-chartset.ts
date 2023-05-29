@@ -18,9 +18,9 @@ export const convertToChartData = (): OperatorFunction<
     ),
     map(([values, series]) =>
       series.map((s, index): Dataset => {
-        const color =
-          "#" +
-          (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6);
+        const color = `#${(0x1000000 + Math.random() * 0xffffff)
+          .toString(16)
+          .substring(1, 7)}`;
         return {
           label: `${s.type}.${s.name}`,
           data: Object.keys(values)

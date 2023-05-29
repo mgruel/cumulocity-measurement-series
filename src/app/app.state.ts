@@ -8,7 +8,7 @@ import { LoadingService } from "../services/loading/loading.service";
 import { MeasurementService } from "../services/measurements/measurement.service";
 
 @Injectable()
-export class AppPloc {
+export class AppState {
   private readonly requestOptions = new BehaviorSubject<RequestOptions>(null);
   private readonly timer$ = timer(0, 15000);
 

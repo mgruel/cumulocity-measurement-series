@@ -1,12 +1,12 @@
 import { Component } from "@angular/core";
-import { AppPloc } from "./app.ploc";
+import { AppState } from "./app.state";
 
 @Component({
   selector: "my-app",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
-  providers: [AppPloc]
+  providers: [AppState]
 })
 export class AppComponent {
-  constructor(public ploc: AppPloc) {}
+  constructor(public state: AppState) {}
 }

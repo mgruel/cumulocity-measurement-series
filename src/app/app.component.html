@@ -1,10 +1,10 @@
 <app-loading-bar></app-loading-bar>
 
 <app-request-options
-  [isLoading$]="ploc.isLoading$"
-  (setOptions)="ploc.updateRequestOptions($event)"
+  [isLoading$]="state.isLoading$"
+  (setOptions)="state.updateRequestOptions($event)"
 ></app-request-options>
 
 <hr />
 
-<app-measurements-chart [chartData$]="ploc.chartData$"></app-measurements-chart>
+<app-measurements-chart [chartData$]="state.chartData$"></app-measurements-chart>
