@@ -1,8 +1,17 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ChartData } from "chart.js";
-import { BehaviorSubject, combineLatest, Observable, of, timer } from "rxjs";
-import { catchError, filter, map, switchMap } from "rxjs/operators";
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  combineLatest,
+  filter,
+  map,
+  of,
+  switchMap,
+  timer
+} from "rxjs";
 import { RequestOptions } from "../models/measurement.model";
 import { LoadingService } from "../services/loading/loading.service";
 import { MeasurementService } from "../services/measurements/measurement.service";
@@ -33,13 +42,19 @@ export class AppState {
     timer$: Observable<number>,
     requestOptions$: Observable<RequestOptions>
   ): Observable<ChartData<"line">> {
-    return combineLatest([timer$, requestOptions$]).pipe(
-      filter(([_, options]) => !!options && options?.authToken.trim() !== ""),
-      map(([_, options]) => options),
+    return combineLatest<[number, RequestOptions]>([
+      timer$,
+      requestOptions$
+    ]).pipe(
+      map(([, options]) => options),
+      filter(options => (options?.authToken ?? "").length > 0),
       switchMap(requestOptions =>
         this.service.getMeasurements(requestOptions).pipe(
-          catchError((err: HttpErrorResponse | Error) => {
-            console.error("Error while retrieving the datasets.", (err as HttpErrorResponse).error ?? err);
+          catchError((err: HttpErrorResponse) => {
+            console.error(
+              "Error while retrieving the datasets.",
+              (err as HttpErrorResponse).error ?? err
+            );
             return of([]);
           })
         )

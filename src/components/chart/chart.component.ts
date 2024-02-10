@@ -6,28 +6,39 @@ import {
   Input,
   NgZone,
   OnChanges,
-  ViewChild,
-} from '@angular/core';
-import type { Chart, ChartData, ChartOptions, ChartType, UpdateMode } from 'chart.js';
+  ViewChild
+} from "@angular/core";
+import type {
+  Chart,
+  ChartData,
+  ChartOptions,
+  ChartType,
+  ChartTypeRegistry,
+  Plugin,
+  UpdateMode
+} from "chart.js";
+import { AnyObject } from "chart.js/dist/types/basic";
 
 @Component({
-  selector: 'app-chartjs',
-  template: `<canvas #ref [attr.height]="height" [attr.width]="width"></canvas>`,
+  selector: "app-chartjs",
+  template: `
+    <canvas #ref [attr.height]="height" [attr.width]="width"></canvas>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [':host { display: block }'],
+  styles: [":host { display: block }"]
 })
 export class ChartjsComponent implements AfterViewInit, OnChanges {
-  @ViewChild('ref') ref!: ElementRef<HTMLCanvasElement>;
+  @ViewChild("ref") ref!: ElementRef<HTMLCanvasElement>;
   @Input() type!: ChartType;
   @Input() data!: ChartData;
   @Input() options!: ChartOptions;
   @Input() height = 150;
   @Input() width = 300;
-  @Input() plugins?: any[];
+  @Input() plugins?: Plugin<keyof ChartTypeRegistry, AnyObject>[];
   /** Force destroy and redraw on chart update */
   @Input() redraw?: boolean;
   @Input() updateMode?: UpdateMode;
-  
+
   private chartInstance!: Chart;
 
   constructor(private zone: NgZone) {}
@@ -63,12 +74,12 @@ export class ChartjsComponent implements AfterViewInit, OnChanges {
     // eslint-disable-next-line @typescript-eslint/naming-convention,@typescript-eslint/no-shadow
     this.zone.runOutsideAngular(async () => {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { Chart } = await import('chart.js');
+      const { Chart } = await import("chart.js");
       this.chartInstance = new Chart(node, {
         type: this.type,
         data: this.data,
         options: this.options,
-        plugins: this.plugins,
+        plugins: this.plugins
       });
     });
   }

@@ -7,10 +7,11 @@ import {
   MeasurementValues
 } from "../../models/measurement.model";
 
-export const convertToChartData = (): OperatorFunction<
-  [MeasurementValues, MeasurementSeries],
-  Datasets
-> => {
+export type ColorDef = { borderColor: string; backgroundColor: string };
+export type ColorDefs = Array<ColorDef>;
+export const convertToChartData = (
+  colors?: ColorDefs | ColorDef
+): OperatorFunction<[MeasurementValues, MeasurementSeries], Datasets> => {
   return pipe(
     filter(([values, series]) => !!values && !!series),
     filter(
@@ -18,9 +19,11 @@ export const convertToChartData = (): OperatorFunction<
     ),
     map(([values, series]) =>
       series.map((s, index): Dataset => {
-        const color = `#${(0x1000000 + Math.random() * 0xffffff)
+        const providedColor = colors && colors[index] || colors;
+        const fallbackColor = `#${(0x1000000 + Math.random() * 0xffffff)
           .toString(16)
           .substring(1, 7)}`;
+        const colorDef: ColorDef = providedColor ? providedColor : { backgroundColor: fallbackColor, borderColor: fallbackColor };
         return {
           label: `${s.type}.${s.name}`,
           data: Object.keys(values)
@@ -32,8 +35,8 @@ export const convertToChartData = (): OperatorFunction<
                 y: (m.min + m.max) / 2
               };
             }),
-          backgroundColor: color,
-          borderColor: color,
+          backgroundColor: colorDef.backgroundColor,
+          borderColor: colorDef.borderColor,
           borderWidth: 1
         };
       })

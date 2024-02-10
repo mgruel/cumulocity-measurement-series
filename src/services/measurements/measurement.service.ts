@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { map } from "rxjs/operators";
-import { convertToChartData } from "../../components/operators/measurements-to-chartset";
+import { ColorDef, ColorDefs, convertToChartData } from "../../components/operators/measurements-to-chartset";
 import {
   Datasets,
   MeasurementSeriesResponse,
@@ -19,7 +19,7 @@ export const getMeasurementSeriesUrl = () =>
 export class MeasurementService {
   constructor(private http: HttpClient) {}
 
-  getMeasurements(requestOptions: RequestOptions): Observable<Datasets> {
+  getMeasurements(requestOptions: RequestOptions, colorDefs?: ColorDefs | ColorDef): Observable<Datasets> {
     if (!requestOptions) {
       return throwError(() => new Error("Missing Request-Options"));
     }
@@ -45,7 +45,7 @@ export class MeasurementService {
       })
       .pipe(
         map(res => [res.values, res.series]),
-        convertToChartData()
+        convertToChartData(colorDefs)
       );
   }
 }
